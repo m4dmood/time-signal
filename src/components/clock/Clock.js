@@ -92,10 +92,6 @@ function Clock() {
         {f: 2000.0, d: 0.03},
         {f: 2500.0, d: 0.03},
         {f: 2000.0, d: 0.03},
-        {f: 2500.0, d: 0.09},
-        {f: 2000.0, d: 0.03},
-        {f: 2500.0, d: 0.03},
-        {f: 2000.0, d: 0.06},
         {f: 2500.0, d: 0.06},
         {f: 2000.0, d: 0.03},
         {f: 2500.0, d: 0.03},
@@ -104,9 +100,13 @@ function Clock() {
         {f: 2000.0, d: 0.03},
         {f: 2500.0, d: 0.03},
         {f: 2000.0, d: 0.06},
+        {f: 2500.0, d: 0.06},
+        {f: 2000.0, d: 0.03},
         {f: 2500.0, d: 0.03},
         {f: 2000.0, d: 0.06},
-        {f: 2500.0, d: 0.09}
+        {f: 2500.0, d: 0.03},
+        {f: 2000.0, d: 0.06},
+        {f: 2500.0, d: 0.06}
     ];
 
     const timer = ms => new Promise(res => setTimeout(res, ms));
@@ -118,9 +118,17 @@ function Clock() {
 
     const multiSignal = async (tones) => {
         for (let i = 0; i < tones.length; i++) {
-            (new SoundPlayer(audio, compressor)).play(tones[i].f, 0.8, "sine").stop(tones[i].d * 9);
-            await timer(tones[i].d * 10);
+            (new SoundPlayer(audio, compressor)).play(tones[i].f, 0.8, "sine").stop(tones[i].d * 10);
+            await timer(tones[i].d * 10 + 20);
         }
+    };
+
+    const utterTime = (time) => {
+      let timeSpeech = new SpeechSynthesisUtterance();
+      timeSpeech.text = "Ore " + time.getHours() + ":" + time.getMinutes();
+      timeSpeech.rate = 0.8;
+      window.speechSynthesis.speak(timeSpeech);
+      timeSpeech.text = ''; // Needed to prevent TTS double trigger
     };
 
     setInterval(() => {
@@ -143,6 +151,8 @@ function Clock() {
             multiSignal(standardToneSequence);
         } else if ((current.getSeconds() >= 54 && current.getSeconds() <= 58) || current.getSeconds() === 0) {
             signal(1000.0, 0.1);
+        } else if (current.getSeconds() === 3) {
+          utterTime(current);
         }
     }, 1000);
 
