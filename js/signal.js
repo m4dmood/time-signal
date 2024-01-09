@@ -14,6 +14,7 @@ const utterTime = (time) => {
 };
 
 const audioTrigger = () => {
+    document.getElementById("trigger").volume = 0.8;
     document.getElementById("trigger").play();
 }
 
