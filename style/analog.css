@@ -1,5 +1,8 @@
 .analog-box {
     background-color: blue;
+    background-image: url('../assets/background.png');
+    background-size: cover;
+    background-position: center;
     width: 15rem;
     height: 15rem;
     margin: 3rem auto;
